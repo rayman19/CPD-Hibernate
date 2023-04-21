@@ -1,0 +1,90 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-mapping PUBLIC
+    "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+    "http://www.hibernate.org/dtd/hibernate-mapping-3.0.dtd">
+<hibernate-mapping>
+
+    <class name="model.ClientsEntity" table="clients" schema="public" catalog="PrintingDB">
+        <id name="id">
+            <column name="id" sql-type="integer"/>
+        </id>
+        <property name="surname">
+            <column name="surname" sql-type="varchar(15)" length="15"/>
+        </property>
+        <property name="firstName">
+            <column name="first_name" sql-type="varchar(15)" length="15"/>
+        </property>
+        <property name="patron">
+            <column name="patron" sql-type="varchar(15)" length="15"/>
+        </property>
+        <property name="phone">
+            <column name="phone" sql-type="varchar(12)" length="12" not-null="true"/>
+        </property>
+        <property name="email">
+            <column name="email" sql-type="varchar(30)" length="30"/>
+        </property>
+        <property name="personalSale">
+            <column name="personal_sale" sql-type="smallint" not-null="true"/>
+        </property>
+        <set name="contractsById" inverse="true">
+            <key>
+                <column name="id_client" not-null="true"/>
+            </key>
+            <one-to-many not-found="ignore" class="model.ContractsEntity"/>
+        </set>
+    </class>
+    <class name="model.ContractsEntity" table="contracts" schema="public" catalog="PrintingDB">
+        <id name="id">
+            <column name="id" sql-type="integer"/>
+        </id>
+        <property name="numberContract">
+            <column name="number_contract" sql-type="varchar(12)" length="12"/>
+        </property>
+        <property name="dateReg">
+            <column name="date_reg" sql-type="timestamp" not-null="true"/>
+        </property>
+        <property name="edition">
+            <column name="edition" sql-type="integer" not-null="true"/>
+        </property>
+        <property name="costContract">
+            <column name="cost_contract" sql-type="real" precision="-1"/>
+        </property>
+        <many-to-one name="clientsByIdClient" class="model.ClientsEntity">
+            <column name="id_client" not-null="true"/>
+        </many-to-one>
+        <many-to-one name="productsByIdProduct" class="model.ProductsEntity">
+            <column name="id_product" not-null="true"/>
+        </many-to-one>
+    </class>
+    <class name="model.ProductsEntity" table="products" schema="public" catalog="PrintingDB">
+        <id name="id">
+            <column name="id" sql-type="integer"/>
+        </id>
+        <property name="namer">
+            <column name="namer" sql-type="varchar(15)" length="15"/>
+        </property>
+        <property name="paperType">
+            <column name="paper_type" sql-type="varchar(15)" length="15"/>
+        </property>
+        <property name="costProduct">
+            <column name="cost_product" sql-type="real" precision="-1"/>
+        </property>
+        <set name="contractsById" inverse="true">
+            <key>
+                <column name="id_product" not-null="true"/>
+            </key>
+            <one-to-many not-found="ignore" class="model.ContractsEntity"/>
+        </set>
+    </class>
+    <class name="model.UsersEntity" table="users" schema="public" catalog="PrintingDB">
+        <id name="id">
+            <column name="id" sql-type="integer"/>
+        </id>
+        <property name="username">
+            <column name="username" sql-type="varchar(15)" length="15"/>
+        </property>
+        <property name="password">
+            <column name="password" sql-type="varchar(20)" length="20"/>
+        </property>
+    </class>
+</hibernate-mapping>
